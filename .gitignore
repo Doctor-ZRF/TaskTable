@@ -1,0 +1,36 @@
+# ===== 个人数据 / 本机配置：绝不提交 =====
+# 数据现在默认在 %APPDATA%\TaskTable\data\ ，理论上不在仓库里了。
+# 下面这些是"万一"——旧版遗留目录、或者你把 data-path.txt 指回程序目录时。
+data/
+data.migrated-*/
+data-path.txt
+*.conflict-*.json
+*.tmp
+state*.json
+
+# ===== 体积过大、不适合进 Git 的二进制 =====
+# TaskTable.exe 有 246MB，超过 GitHub 单文件 100MB 硬限制，直接 add 会报错。
+# 要让别人"下载就能用"，请用 GitHub Releases 上传压缩包，不要塞进仓库。
+TaskTable.exe
+resources/app.asar
+resources/app.asar.orig-*.bak
+default_app.asar
+
+# Electron 运行时（体积大，由 releases 提供）
+*.dll
+*.pak
+*.bin
+*.dat
+vk_swiftshader_icd.json
+locales/
+LICENSES.chromium.html
+LICENSE.electron.txt
+
+# 运行时其实用不到（renderer 已把 react 打进 dist 的 bundle 里），
+# 忽略它只是为了仓库小一点；本地文件不动，程序照样跑。
+resources/app/node_modules/
+
+# 系统垃圾
+Thumbs.db
+desktop.ini
+.DS_Store

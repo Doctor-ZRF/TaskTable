@@ -1,0 +1,73 @@
+# TaskTable（四象限工作表）· 0.1.6-local
+
+桌面端「艾森豪威尔四象限」任务管理小工具（Electron + React 19），托盘常驻、`Alt+Q` 速录、到点/节律/停滞三类提醒。
+
+本仓库是在原版 **0.1.5** 基础上打的本地补丁，主题是：**把数据从浏览器数据库里搬出来，变成一个可被网盘 / NAS 同步的 JSON 文件**，并做了几处交互修正。
+
+## 仓库内容
+
+| 路径 | 说明 |
+|---|---|
+| `resources/app/desktop/main.cjs` | Electron 主进程：窗口/托盘/快捷键 + 文件存储 IPC（原子写、冲突留档、并集合并、旧数据迁移） |
+| `resources/app/desktop/preload.cjs` | contextBridge 暴露 `window.desktop.store` |
+| `resources/app/dist/` | 渲染层 bundle（Vite 构建产物，含下面所有界面补丁） |
+| `使用说明-数据同步.txt` | 面向使用者的完整说明（路径优先级、同步配法、限制、回滚） |
+
+**不含** Electron 运行时（`TaskTable.exe` 246 MB、各类 dll/pak 超过 GitHub 单文件限制）。想直接运行请见下方「运行方式」。
+
+## 相对原版 0.1.5 的改动
+
+1. **数据文件化**
+   整份状态（任务 / 提醒 / 设置 / 节律日志）存成单个 `state.json`。
+   默认位置 `%APPDATA%\TaskTableData\data\state.json`（每台机器各自一份，不进程序目录）。
+   路径优先级：`TASKTABLE_DATA_FILE` 环境变量 > `%APPDATA%\TaskTableData\data-path.txt` > 默认。
+   - 写入用「临时文件 `.tmp` + 改名」原子替换，同步工具不会读到半个文件；
+   - 首次启动会把旧版存在 IndexedDB 里的数据自动导出成该文件。
+
+2. **多机同步语义**
+   - 两边都改过时：先把对方那版留档为 `state.conflict-<机器名>-<时间>.json`，再按任务 id **并集合并**（同一条以 `lastTouchedAt` 更新者为准）；
+   - 数据文件意外丢失时，会从旧版浏览器数据库自愈一份，不会显示空列表；
+   - 导航栏「↻ 同步」按钮可按需重新读取并合并，不用重启程序。
+
+3. **界面调整**
+   - 顶部导航栏新增 `↻ 同步` 与 `+ 记一件`；原四象限中央的悬浮圆钮在宽屏下隐藏；
+   - 「今天」列卡片：标题独占一行，倒计时徽章另起一行（不再把标题挤成一列字）；
+   - 「今天」列卡片底部新增可折叠的进展记录行（折叠时显示条数 + 最新一条预览）；
+   - 修复窗口宽度 ≤960px 时单列布局下「今天」列被四象限卡片遮住的问题。
+
+## 数据与同步
+
+- 程序里看路径：设置 → 数据 → 「数据文件」，右侧「打开文件夹」。
+- 想多台机器同步：用任意同步盘（Syncthing 内核的网盘客户端亦可）同步 `...\TaskTableData\data` 这**一个文件夹**，两台都设为双向。
+- `.gitignore` 已忽略 `data/`、`data.migrated-*/`、`data-path.txt`、`*.conflict-*.json`、`state*.json`，不会误提交个人任务。
+
+## 运行方式
+
+**开发跑（不需要那个 246 MB 的 exe）**：本仓库的 `resources/app` 本身就是一个完整的 Electron 应用目录
+（`package.json` 的 `main` 指向 `desktop/main.cjs`），所以装个 Electron 运行时就能跑：
+
+```bash
+npm i -D electron
+npx electron resources/app
+```
+
+**当成桌面程序跑**：取一份 Electron 运行时目录（含 `TaskTable.exe` 与各种 dll），把本仓库的 `resources/app`
+放进它的 `resources/` 下（不要同时存在同名的 `app.asar`），然后运行 `TaskTable.exe`
+（原版是 `resources/app.asar`；本补丁改成散开的 `resources/app` 目录，方便直接改 JS 并随时回滚）。
+
+## 想参与改进？
+
+- 这个仓库是**在原版构建产物上打的补丁**：`desktop/*.cjs` 是可读源码，`dist/` 是压缩后的 bundle。
+  所以直接改界面会很痛苦 —— 要做正经功能开发，请以**原作者的源码工程**为准。
+- [PATCHES.md](PATCHES.md) 把每一处改动都列了出来（压缩产物的原始锚点 + 建议在源码里的落点），
+  原作者可以直接照着合进源码，不需要读 minified 代码。
+- 本仓库欢迎：Issue 报 bug / 提需求、README 与脚本类 PR、以及新的补丁建议。
+
+## License
+
+本仓库暂未添加 LICENSE 文件，按默认规则 = **保留所有权利**。
+若要公开使用或分发，请先与原程序作者确认授权（建议在上游选定 MIT 或 GPL-3.0，本仓库随之声明）。
+
+## 来源与致谢
+
+原程序由朋友借助 AI agent 开发；本仓库只是在其构建产物上做的本地改动记录。

@@ -1,0 +1,13 @@
+{
+  "name": "tasktable",
+  "private": true,
+  "version": "0.1.6",
+  "type": "module",
+  "description": "四象限工作表 — 艾森豪威尔任务管理工具（本地同步补丁版）",
+  "author": "tasktable",
+  "main": "desktop/main.cjs",
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  }
+}
