@@ -77,3 +77,14 @@ npx electron resources/app
 ## 来源与致谢
 
 原程序由朋友借助 AI agent 开发；本仓库只是在其构建产物上做的本地改动记录。
+
+## ⚠️ 换版本须知（踩过的坑）
+
+1. **程序目录里不能同时存在 `resources/app.asar` 和 `resources/app/`** ——
+   Electron 的加载顺序是 `app.asar` 优先，asar 在就会静默加载 asar 里的旧代码，
+   你改了 `resources/app/` 却不生效，且界面会显示"另一个版本"。
+   本仓库使用散开的 `resources/app/`，所以 `resources/` 下只保留：
+   `app/` + `app.asar.orig-0.1.5.bak`（备份）+ `default_app.asar`。
+2. **换版本 = 整个文件夹替换**，不要往旧文件夹里拷 `resources/`（会混入 asar 或残留旧资源）。
+3. 数据在 `%APPDATA%\TaskTableData\data\state.json`，换程序目录不影响数据；
+   但两台电脑的 exe 不要同时指向同一个用户 profile（单实例锁会互相顶掉）。
