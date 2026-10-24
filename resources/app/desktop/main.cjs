@@ -356,6 +356,17 @@ if (!app.requestSingleInstanceLock()) {
 } else {
   app.on('second-instance', showWindow)
 
+  const DEFAULT_HOTKEYS = { capture: 'Alt+Q', inbox: 'Alt+T' }
+
+  /** 注册全局快捷键，返回注册失败的那些（被别的程序占了） */
+  function registerHotkeys(combos) {
+    globalShortcut.unregisterAll()
+    const failed = []
+    if (!globalShortcut.register(combos.capture, () => send('capture'))) failed.push(combos.capture)
+    if (!globalShortcut.register(combos.inbox, () => send('triage'))) failed.push(combos.inbox)
+    return failed
+  }
+
   app.whenReady().then(() => {
     serveDist()
     createWindow()
@@ -364,8 +375,18 @@ if (!app.requestSingleInstanceLock()) {
     tray.on('click', () => (win && win.isVisible() ? win.hide() : showWindow()))
     refreshTray()
 
-    globalShortcut.register('Alt+Q', () => send('capture'))
-    globalShortcut.register('Alt+T', () => send('triage'))
+    registerHotkeys(DEFAULT_HOTKEYS)
+
+    // 界面里改完快捷键会推过来，这里重新注册。
+    // 注册可能失败（被别的程序占用），结果回报给界面，别让它静默失效。
+    ipcMain.on('hotkeys', (event, payload) => {
+      const combos = {
+        capture: typeof payload?.capture === 'string' ? payload.capture : DEFAULT_HOTKEYS.capture,
+        inbox: typeof payload?.inbox === 'string' ? payload.inbox : DEFAULT_HOTKEYS.inbox,
+      }
+      const failed = registerHotkeys(combos)
+      event.sender.send('hotkeys-result', failed)
+    })
 
     ipcMain.on('status', (_event, payload) => {
       status = { today: payload?.today ?? 0, unread: payload?.unread ?? 0 }

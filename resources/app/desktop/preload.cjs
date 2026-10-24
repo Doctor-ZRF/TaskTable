@@ -13,6 +13,13 @@ contextBridge.exposeInMainWorld('desktop', {
   setStatus: (payload) => {
     ipcRenderer.send('status', payload)
   },
+  /** 把界面里改好的快捷键交给主进程重新注册；返回注册失败的那些 */
+  setHotkeys: (combos) => {
+    ipcRenderer.send('hotkeys', combos)
+  },
+  onHotkeysResult: (cb) => {
+    ipcRenderer.on('hotkeys-result', (_event, failed) => cb(failed))
+  },
   closeToTrayHintShown: () => {
     ipcRenderer.send('close-hint-shown')
   },
