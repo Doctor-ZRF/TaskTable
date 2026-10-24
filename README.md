@@ -4,6 +4,17 @@
 
 本仓库是在原版 **0.1.5** 基础上打的本地补丁，主题是：**把数据从浏览器数据库里搬出来，变成一个可被网盘 / NAS 同步的 JSON 文件**，并做了几处交互修正。
 
+## 下载（Windows 64 位）
+
+[![Release](https://img.shields.io/badge/release-v0.1.7--local-blue)](https://github.com/Doctor-ZRF/TaskTable/releases/latest)
+
+到 [Releases](https://github.com/Doctor-ZRF/TaskTable/releases/latest) 下载
+`TaskTable-0.1.7-local-win-x64.zip`（约 152 MB）→ 解压到任意目录 → 双击 `TaskTable.exe`。
+
+- 不需要装 Node / Electron / npm，**解压即用**
+- 首次运行若遇 SmartScreen「Windows 已保护你的电脑」：更多信息 → 仍要运行（exe 未签名）
+- 数据默认写到 `%APPDATA%\TaskTableData\data\state.json`
+
 ## 仓库内容
 
 | 路径 | 说明 |
