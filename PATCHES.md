@@ -127,7 +127,7 @@ store: {
 
 - 设置 → 数据 → 区块底部说明改成新路径 + 同步方式。
 - 新增一行「数据文件 + 路径 + 打开文件夹」（`store.path()` / `store.reveal()`）。
-- 左下角版本号 `v0.1.5` → `v0.1.7-local`；`package.json` 的 `version` 同步改为 `0.1.6`。
+- 左下角版本号 `v0.1.5` → `v0.1.8-local`；`package.json` 的 `version` 同步改为 `0.1.6`。
 
 ---
 

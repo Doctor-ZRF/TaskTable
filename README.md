@@ -1,4 +1,4 @@
-# TaskTable（四象限工作表）· 0.1.7-local
+# TaskTable（四象限工作表）· 0.1.8-local
 
 桌面端「艾森豪威尔四象限」任务管理小工具（Electron + React 19），托盘常驻、`Alt+Q` 速录、到点/节律/停滞三类提醒。
 
@@ -9,11 +9,22 @@
 [![Release](https://img.shields.io/badge/release-v0.1.7--local-blue)](https://github.com/Doctor-ZRF/TaskTable/releases/latest)
 
 到 [Releases](https://github.com/Doctor-ZRF/TaskTable/releases/latest) 下载
-`TaskTable-0.1.7-local-win-x64.zip`（约 152 MB）→ 解压到任意目录 → 双击 `TaskTable.exe`。
+`TaskTable-0.1.8-local-win-x64.zip`（约 152 MB）→ 解压到任意目录 → 双击 `TaskTable.exe`。
 
 - 不需要装 Node / Electron / npm，**解压即用**
 - 首次运行若遇 SmartScreen「Windows 已保护你的电脑」：更多信息 → 仍要运行（exe 未签名）
 - 数据默认写到 `%APPDATA%\TaskTableData\data\state.json`
+
+## 更新记录
+
+- **0.1.8-local**（2026-10-26）
+  - 修复：在详情页删除任务后，再也打不开任何任务详情（关闭动画回调随组件卸载被取消，会话状态卡死）
+  - 关于 → 更新：当前版本号不再硬编码；默认仓库指向本项目，开箱即可检查更新
+- **0.1.7-local**（2026-10-24）
+  - 合并原作者 0.1.6：快捷键自定义、历史页、关于面板、新卡片结构、深色主题
+  - 数据文件化、多机同步（冲突留档 + 并集合并）、导航栏「↻ 同步」、进展记录折叠
+- **0.1.6-local**（2026-10-23）
+  - 首个本地版：数据存文件、原子写、旧数据自动迁移
 
 ## 仓库内容
 
@@ -28,7 +39,7 @@
 
 ## 这个版本是什么
 
-`0.1.7-local` = **原作者 0.1.6**（快捷键自定义 + 界面改造）+ **本地补丁**（数据文件化 + 多机同步）。
+`0.1.8-local` = **原作者 0.1.6**（快捷键自定义 + 界面改造）+ **本地补丁**（数据文件化 + 多机同步）。
 两边的改动通过三方合并（0.1.5 为共同基线）合成，两边功能都在。
 
 ### 原作者 0.1.6 带来的

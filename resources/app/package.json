@@ -1,7 +1,7 @@
 {
   "name": "tasktable",
   "private": true,
-  "version": "0.1.7",
+  "version": "0.1.8",
   "type": "module",
   "description": "四象限工作表 — 艾森豪威尔任务管理工具",
   "author": "tasktable",
